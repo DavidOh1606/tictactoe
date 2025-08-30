@@ -63,9 +63,8 @@ span {
 
 form.player-names {
     display: flex;
-    width: 80%;
     justify-content: space-between;
-
+    gap: 128px;
 }
 
 
@@ -74,7 +73,8 @@ div.player-name {
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    font-size: 1.8rem;
+
+    font-size: 1.4rem;
 }
 
 input.player-name {
@@ -98,4 +98,13 @@ input.ready-button {
     width: 8rem;
 }
 
+.name-display {
+    display: flex;
+    gap: 424px;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
 
+.name-display div {
+    font-family: Arial, Helvetica, sans-serif;
+}

@@ -1,13 +1,13 @@
 const ROWCOUNT = 3;
 const COLCOUNT = 3;
 
+const playerOne = createPlayer("X", 1);
+const playerTwo = createPlayer("O", 2);
 
 function createPlayer(char, num) {
     return {char, num};
 }
 
-const playerOne = createPlayer("X", 1);
-const playerTwo = createPlayer("O", 2);
 
 const gameBoard = (function(playerOne, playerTwo) {
 
@@ -104,9 +104,9 @@ const createBox = function(gameManager, board, row, col) {
 }  
 
 const gameManager = (function(board, playerOne, playerTwo) {
-    const resetButton = document.querySelector(".reset");
     const content = document.querySelector(".content");
     const text = document.querySelector("div.turn-text");
+    const buttonContainer = document.querySelector(".button-container");
 
     let currentPlayer;
 
@@ -114,6 +114,8 @@ const gameManager = (function(board, playerOne, playerTwo) {
         currentPlayer = playerOne;
         createBoxes();
         playerText();
+        createResetButton();
+        console.log('HI');
     }
 
     const createBoxes = function() {
@@ -138,7 +140,7 @@ const gameManager = (function(board, playerOne, playerTwo) {
             
             boardState === -1 ? tieText() : winText();
             const boxes = document.querySelectorAll(".box");
-            boxes.forEach(box => box.classList.add("game-over"));
+            boxes.forEach(box => box.classList.add("game-over"));   
 
             return;
         }
@@ -163,29 +165,121 @@ const gameManager = (function(board, playerOne, playerTwo) {
 
     const playerText = function() {
 
-        text.innerText = `Player ${currentPlayer.num}'s Turn`;
+        text.innerText = `${currentPlayer.username}'s Turn`;
     }
 
     const winText = function() {
-        text.innerText = `Player ${currentPlayer.num} Wins!`;
+        text.innerText = `${currentPlayer.username} Wins!`;
     }
 
     const tieText = function() {
         text.innerText = `Tie! No One Wins`;
     }
 
+    const createResetButton = function() {
+        const resetButton = document.createElement("button");
+        resetButton.classList.add("reset");
+        resetButton.innerText = "Reset Game";
+
+        resetButton.addEventListener("click", resetGame);
+        buttonContainer.appendChild(resetButton);
+    }
+
     const resetGame = function() {
         const boxElements = document.querySelectorAll(".box");
         boxElements.forEach(box => box.remove());
         board.resetBoard();
+        text.innerText = "";
+
+        if (buttonContainer.hasChildNodes()) buttonContainer.firstChild.remove();
         playGame();
     }
 
     const getCurrentPlayer = () => currentPlayer;
-    resetButton.addEventListener("click", resetGame);
+   
 
     return {playGame, getCurrentPlayer, switchTurn};
 
 }) (gameBoard, playerOne, playerTwo);
 
-gameManager.playGame();
+
+const playerManager = (function(gameManager, playerOne, playerTwo) {
+    
+    const namesContainer = document.querySelector(".player-names-div");
+
+    const createForm = function() {
+        const form = document.createElement("form");
+        form.classList.add("player-names");
+
+        const playerOneInput = createPlayerInput("player-one", "Player One's Name");
+        const playerTwoInput = createPlayerInput("player-two", "Player Two's Name");
+
+        const readyButton = document.createElement("input");
+        readyButton.type = "submit";
+        readyButton.value = "Ready!!";
+        readyButton.classList.add("ready-button");
+
+        form.appendChild(playerOneInput);
+        form.appendChild(readyButton);
+        form.appendChild(playerTwoInput);
+
+        namesContainer.appendChild(form);
+
+        form.addEventListener("submit", function(event) {
+
+            const nameInputs = document.querySelectorAll("input.player-name");
+            createNameDisplays(`${nameInputs[0].value} ${playerOne.char}` , `${nameInputs[1].value} ${playerTwo.char}`);
+            playerOne.username = nameInputs[0].value;
+            playerTwo.username = nameInputs[1].value;
+            gameManager.playGame();
+            form.remove();
+            event.preventDefault();
+        });
+
+        function createPlayerInput(playerClass, text) {
+            const playerDiv = document.createElement("div");
+            const playerLabel = document.createElement("label");
+            const playerInput = document.createElement("input");
+
+            playerDiv.classList.add("player-name");
+
+            playerLabel.for = playerClass;
+            playerLabel.innerText = text;
+            playerInput.type = "text";
+            playerInput.id = playerClass;
+            playerInput.classList.add("player-name");
+            playerInput.name = "player-name";
+            playerInput.maxlength = "10";
+
+            playerDiv.appendChild(playerLabel);
+            playerDiv.appendChild(playerInput);
+            return playerDiv;
+        }
+
+        function createNameDisplays(nameOne, nameTwo) {
+
+            const nameDisplayContainer = document.createElement("div");
+            nameDisplayContainer.classList.add("name-display");
+
+            const displayOne = document.createElement("div");
+            const displayTwo = document.createElement("div");
+
+            displayOne.classList.add("display-one");
+            displayTwo.classList.add("display-two");
+
+            displayOne.innerText = nameOne;
+            displayTwo.innerText = nameTwo;
+
+            nameDisplayContainer.appendChild(displayOne);
+            nameDisplayContainer.appendChild(displayTwo);
+
+            namesContainer.appendChild(nameDisplayContainer);
+        }
+    }
+
+    return {createForm};
+}) (gameManager, playerOne, playerTwo);
+
+
+
+playerManager.createForm();
