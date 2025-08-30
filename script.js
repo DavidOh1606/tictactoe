@@ -115,7 +115,6 @@ const gameManager = (function(board, playerOne, playerTwo) {
         createBoxes();
         playerText();
         createResetButton();
-        console.log('HI');
     }
 
     const createBoxes = function() {
@@ -228,7 +227,7 @@ const playerManager = (function(gameManager, playerOne, playerTwo) {
         form.addEventListener("submit", function(event) {
 
             const nameInputs = document.querySelectorAll("input.player-name");
-            createNameDisplays(`${nameInputs[0].value} ${playerOne.char}` , `${nameInputs[1].value} ${playerTwo.char}`);
+            createNameDisplays(`${nameInputs[0].value} - ${playerOne.char}` , `${nameInputs[1].value} - ${playerTwo.char}`);
             playerOne.username = nameInputs[0].value;
             playerTwo.username = nameInputs[1].value;
             gameManager.playGame();
