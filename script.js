@@ -67,7 +67,13 @@ const gameBoard = (function(playerOne, playerTwo) {
             return (board[2][0] === ONE ? 1 : 2);
         }
 
-        return 0;
+        for (let row = 0; row < ROWCOUNT; row++) {
+            for (let col = 0; col < COLCOUNT; col++) {
+                if (board[row][col] === EMPTY) return 0;
+            }
+        }
+
+        return -1;
     }
 
     function highlightWinning(boxes) {
@@ -124,9 +130,13 @@ const gameManager = (function(board, playerOne, playerTwo) {
     }
 
     const switchTurn = function() {
-        if (board.playerWon() != 0) {
+        const boardState = board.playerWon();
+
+
+        if (boardState != 0) {
             content.removeEventListener("click", chooseBox);
-            winText();
+            
+            boardState === -1 ? tieText() : winText();
             const boxes = document.querySelectorAll(".box");
             boxes.forEach(box => box.classList.add("game-over"));
 
