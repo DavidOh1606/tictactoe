@@ -61,4 +61,41 @@ span {
     border-radius: 4px;
 }
 
+form.player-names {
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+
+}
+
+
+div.player-name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    font-size: 1.8rem;
+}
+
+input.player-name {
+    border-radius: 8px;
+    border: 1px solid white;
+    width: 10rem;
+    height: 2rem;
+    font-size: 1.8rem;
+    background-color: black;
+    color: white;
+}
+
+input.ready-button {
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+    border-radius: 8px;
+
+    font-size: 1.2rem;
+    height: 4rem;
+    width: 8rem;
+}
+
 
