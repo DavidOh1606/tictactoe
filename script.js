@@ -76,7 +76,15 @@ const gameBoard = (function(playerOne, playerTwo) {
         boxes.forEach(box => boxElements[box[0] * COLCOUNT + box[1]].classList.add("winning"));
     }
 
-    return {printBoard, makeMove, playerWon}
+    function resetBoard() {
+        for (let row = 0; row < ROWCOUNT; row++) {
+            for (let col = 0; col < COLCOUNT; col++) {
+                board[row][col] = EMPTY;
+            }
+        }
+    }
+
+    return {printBoard, makeMove, playerWon, resetBoard};
 }) (playerOne, playerTwo);
 
 const createBox = function(gameManager, board, row, col) {
@@ -90,12 +98,14 @@ const createBox = function(gameManager, board, row, col) {
 }  
 
 const gameManager = (function(board, playerOne, playerTwo) {
+    const resetButton = document.querySelector(".reset");
     const content = document.querySelector(".content");
     const text = document.querySelector("div.turn-text");
 
-    let currentPlayer = playerOne;
+    let currentPlayer;
 
     const playGame = function() {  
+        currentPlayer = playerOne;
         createBoxes();
         playerText();
     }
@@ -150,7 +160,19 @@ const gameManager = (function(board, playerOne, playerTwo) {
         text.innerText = `Player ${currentPlayer.num} Wins!`;
     }
 
+    const tieText = function() {
+        text.innerText = `Tie! No One Wins`;
+    }
+
+    const resetGame = function() {
+        const boxElements = document.querySelectorAll(".box");
+        boxElements.forEach(box => box.remove());
+        board.resetBoard();
+        playGame();
+    }
+
     const getCurrentPlayer = () => currentPlayer;
+    resetButton.addEventListener("click", resetGame);
 
     return {playGame, getCurrentPlayer, switchTurn};
 
