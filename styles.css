@@ -37,6 +37,14 @@ body {
     align-items: center;
 }
 
+.box:hover:not(.selected):not(.game-over) {
+    background-color: gray;
+}
+
+.box.winning {
+    background-color: gold;
+}
+
 span {
     color: black;
     font-size: 50px;

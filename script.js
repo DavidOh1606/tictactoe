@@ -43,6 +43,7 @@ const gameBoard = (function(playerOne, playerTwo) {
     function playerWon() {
         for (let row = 0; row < ROWCOUNT; row++) {
             if (board[row][0] != EMPTY && board[row][0] === board[row][1] && board[row][1] === board[row][2]) {
+                highlightWinning([[row, 0], [row, 1], [row, 2]]);
                 return (board[row][0] === ONE ? 1 : 2);
             }
         }
@@ -50,20 +51,29 @@ const gameBoard = (function(playerOne, playerTwo) {
 
         for (let col = 0; col < COLCOUNT; col++) {
             if (board[0][col] != EMPTY && board[0][col] === board[1][col] && board[1][col] === board[2][col]) {
+                highlightWinning([[0, col], [1, col], [2, col]]);
                 return (board[0][col] === ONE ? 1 : 2);
             }
         }
 
         // Check diagonals
         if (board[0][0] != EMPTY && board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
+            highlightWinning([[0, 0], [1, 1], [2, 2]]);
             return (board[0][0] === ONE ? 1 : 2);
         }
 
         else if (board[2][0] != EMPTY && board[2][0] === board[1][1] && board[1][1] === board[0][2]) {
+            highlightWinning([[2, 0], [1, 1], [0, 2]]);
             return (board[2][0] === ONE ? 1 : 2);
         }
 
         return 0;
+    }
+
+    function highlightWinning(boxes) {
+        const boxElements = document.querySelectorAll(".box");
+
+        boxes.forEach(box => boxElements[box[0] * COLCOUNT + box[1]].classList.add("winning"));
     }
 
     return {printBoard, makeMove, playerWon}
@@ -107,6 +117,9 @@ const gameManager = (function(board, playerOne, playerTwo) {
         if (board.playerWon() != 0) {
             content.removeEventListener("click", chooseBox);
             winText();
+            const boxes = document.querySelectorAll(".box");
+            boxes.forEach(box => box.classList.add("game-over"));
+
             return;
         }
         currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
@@ -118,6 +131,7 @@ const gameManager = (function(board, playerOne, playerTwo) {
 
         const box = event.target;
         const moveIcon = document.createElement("span");
+        box.classList.add("selected");
 
         moveIcon.innerText = gameManager.getCurrentPlayer().char;
         box.appendChild(moveIcon);
