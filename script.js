@@ -227,8 +227,8 @@ const playerManager = (function(gameManager, playerOne, playerTwo) {
         form.addEventListener("submit", function(event) {
 
             const nameInputs = document.querySelectorAll("input.player-name");
-            const nameOne = (nameInputs[0].value.trim().length === 0 ? "Unnamed 1" : nameInputs[0].value.trim());
-            const nameTwo = (nameInputs[1].value.trim().length === 0 ? "Unnamed 2" : nameInputs[1].value.trim());
+            const nameOne = (nameInputs[0].value.trim().length === 0 ? "Player 1" : nameInputs[0].value.trim());
+            const nameTwo = (nameInputs[1].value.trim().length === 0 ? "Player 2" : nameInputs[1].value.trim());
 
             createNameDisplays(`${nameOne} - ${playerOne.char}` , `${nameTwo} - ${playerTwo.char}`);
             playerOne.username = nameOne;
